@@ -8,45 +8,35 @@ function getCircleModel(item) {
 }
 
 class CirclesView extends Component{
+
     constructor() {
         super();
         this.state = {};
-        var _item = new getCircleModel({});//Default item set
-        this.state.data = [_item];
+        this.state.data = [new getCircleModel({})];//Default item set
         this.state.viewportWidth = 250;
-
-        this.handleAddEvent = this.handleAddEvent.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.onItemUpdate = this.onItemUpdate.bind(this);
     }
-    handleAddEvent() {
-        var _item = new getCircleModel({});   //Default item set
-        this.state.data.push(_item);
-        this.setState(this.state.data);
-    }
-    handleDelete(index) {
-        this.state.data.splice(index, 1);
-        this.setState({data:this.state.data});
+    handleAddEvent=()=>{
+        this.setState((prevState)=>{
+            return { data: prevState.data.concat([new getCircleModel({})])};//Default item set
+        });
     }
 
-    onItemUpdate(index, item) {
-        this.state.data[index] = new getCircleModel(item);
+    handleDelete=(index)=>{
+        this.setState((prevState)=>{
+            prevState.data.splice(index, 1);
+            return {data:prevState.data };
+        });
+    }
 
-        let _sum = 2*this.state.data.reduce((a, b)=>{
-            debugger;
-            return b.r;
-        }, 0);
+    onItemUpdate=(index, item)=>{
+        const itemInfo = new getCircleModel(item);
+        this.state.data[index]['cx']= itemInfo.cx;
+        this.state.data[index]['cy']= itemInfo.cy;
+        this.state.data[index]['r']= itemInfo.r;
 
-        if(_sum>this.state.viewportWidth){
-            alert("${sum of circles diameters cannot be larger than the viewport width viewportWidth}");
-        } else {
-
-            this.state.data[index] = new getCircleModel(item);
-            /*this.state.data[index]['cx']= item.cx;
-             this.state.data[index]['cy']= item.cy;
-             this.state.data[index]['r']= item.r;*/
-            this.setState({data: this.state.data});
-        }
+        this.setState((prevState)=>{
+            return {data: prevState.data};
+        });
     }
 
     render() {
@@ -54,7 +44,11 @@ class CirclesView extends Component{
             <div>
                 <h2>Circles</h2>
                 <div className="circleArea">
-                    <CircleInputForm circleList={this.state.data} onItemAdd={this.handleAddEvent} onItemDel={this.handleDelete} onItemUpdate={this.onItemUpdate} />
+                    <CircleInputForm
+                        circleList={this.state.data}
+                        onItemAdd={this.handleAddEvent}
+                        onItemDel={this.handleDelete}
+                        onItemUpdate={this.onItemUpdate} />
                 </div>
                 <div className="circleArea float-left">
                     <CircleList items={this.state.data}/>
@@ -67,17 +61,15 @@ class CirclesView extends Component{
 class CircleInputForm extends Component {
     constructor(props) {
         super(props);
-        this.renderCircleInputs = this.renderCircleInputs.bind(this);
     }
 
-    onChange(e) {
-        var item = {};
-        item[e.target.name] = parseInt(e.target.value);
-        this.setState(item);
-    }
-
-    renderCircleInputs(item, i) {
-        return (<CircleInputs key={Math.random()} index={i} item={item} onItemDel={this.props.onItemDel} onItemUpdate={this.props.onItemUpdate}/>);
+    renderCircleInputs=(item, i)=> {
+        return(<CircleInputs
+            key={Math.random()}
+            index={i}
+            item={item}
+            onItemDel={this.props.onItemDel}
+            onItemUpdate={this.props.onItemUpdate}/>);
     }
 
     render() {
@@ -101,22 +93,22 @@ class CircleInputs extends Component {
         super(props);
         const _item = props.item;
         this.state = new getCircleModel(_item);
-        this.onChange = this.onChange.bind(this);
-        this.onDelEvent = this.onDelEvent.bind(this);
-        this.onupdateEvent = this.onupdateEvent.bind(this);
     }
 
-    onChange(e) {
+    onChange=(e)=>{
         var item = {};
         item[e.target.name] = parseInt(e.target.value);
-        this.setState(item);
+
+        this.setState((prevState)=>{
+            return item;
+        });
     }
 
-    onupdateEvent(e) {
+    onupdateEvent=(e)=>{
         this.props.onItemUpdate(this.props.index, this.state);
     };
 
-    onDelEvent(e) {
+    onDelEvent=(e)=>{
         this.props.onItemDel(this.props.index);
     };
 
@@ -129,8 +121,6 @@ class CircleInputs extends Component {
 
     componentWillUpdate(nextProps, nextState) {
         console.log('Component WILL UPDATE!');
-
-
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -170,7 +160,7 @@ class CircleItem extends Component {
         const _key = this.props.index+1;
         return (
             <g>
-                <circle cy={item.cy} cx={item.cx} r={item.r}/>
+                <circle cy={item.cy} cx={item.cx} r={item.r} fill="purple"/>
                 <text y={item.cy+50} x={item.cx}>{_key}</text>
             </g>
         )

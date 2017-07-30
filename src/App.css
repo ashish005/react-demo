@@ -70,3 +70,9 @@ input {
 .not-allowed{
   color:red;
 }
+
+svg.rotate{
+  /* rotate the entire image */
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
