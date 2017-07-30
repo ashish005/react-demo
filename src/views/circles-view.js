@@ -200,7 +200,7 @@ class CircleItem extends Component {
         const item = this.props.data;
         const _key = this.props.index+1;
         return (
-                <circle cy={item.cy} cx={item.cx} r={item.r} fill="purple"/>
+                <circle cy={500-item.cy} cx={item.cx} r={item.r} fill="purple"/>
         )
     }
 }
