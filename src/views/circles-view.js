@@ -67,7 +67,7 @@ class CirclesView extends Component{
                         onItemDel={this.handleDelete}
                         onItemUpdate={this.onItemUpdate} />
                 </div>
-                <div className="circleArea float-left">
+                <div className="circleArea">
                     <CircleList items={this.state.data}/>
                 </div>
             </div>

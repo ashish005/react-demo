@@ -28,6 +28,7 @@
   display: inline-block;
   width: 500px;
   vertical-align: top;
+  margin: 0px 10px 10px 10px;
 }
 
 .float-left {
