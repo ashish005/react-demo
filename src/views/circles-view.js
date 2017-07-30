@@ -8,15 +8,28 @@ function getCircleModel(item) {
 }
 
 class CirclesView extends Component{
-
-    constructor() {
-        super();
-        this.state = {};
-        this.state.data = [new getCircleModel({})];//Default item set
-        this.state.viewportWidth = 250;
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: []
+        };
+    }
+    componentDidMount() {
+        this.updateCircles(this.getLocalStorageData());
+    }
+    updateCircles(circleList) {
+        return this.setState({data:circleList});
+    }
+    getLocalStorageData(item){
+       return JSON.parse(localStorage.getItem('circleList')) || [];//Default item set
+    }
+    setLocalStorageData(item){
+        localStorage.setItem('circleList', JSON.stringify(item));
     }
     handleAddEvent=()=>{
         this.setState((prevState)=>{
+            let item = prevState.data.concat([new getCircleModel({})]);
+            this.setLocalStorageData(item);
             return { data: prevState.data.concat([new getCircleModel({})])};//Default item set
         });
     }
@@ -24,6 +37,7 @@ class CirclesView extends Component{
     handleDelete=(index)=>{
         this.setState((prevState)=>{
             prevState.data.splice(index, 1);
+            this.setLocalStorageData(prevState.data);
             return {data:prevState.data };
         });
     }
@@ -35,6 +49,7 @@ class CirclesView extends Component{
         this.state.data[index]['r']= itemInfo.r;
 
         this.setState((prevState)=>{
+            this.setLocalStorageData(prevState.data);
             return {data: prevState.data};
         });
     }
