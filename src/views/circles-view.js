@@ -7,6 +7,8 @@ function getCircleModel(item) {
     //Default item set
 }
 
+
+
 class CirclesView extends Component{
     constructor(props) {
         super(props);
@@ -76,7 +78,31 @@ class CirclesView extends Component{
 class CircleInputForm extends Component {
     constructor(props) {
         super(props);
+        this.state = { hasViewPortError : false };
     }
+
+    getDiameter(index, itemD){
+        let _item = this.props.circleList
+            .map((item, i) => {
+                return (index===i)?itemD.r:item.r;
+        })
+            .reduce((prev, next)=> { return prev + next });
+        return _item*2;
+    }
+
+    onUpdate=(index, item)=>{
+        let _val = this.getDiameter(index, item) || 0;
+
+        //Assumed view port width is 500
+        if(_val>500){
+            this.setState({hasViewPortError:true});
+            setTimeout(function() {
+                this.setState({hasViewPortError:false})
+            }.bind(this), 2000);
+        } else {
+            this.props.onItemUpdate(index, item);
+        }
+    };
 
     renderCircleInputs=(item, i)=> {
         return(<CircleInputs
@@ -84,7 +110,7 @@ class CircleInputForm extends Component {
             index={i}
             item={item}
             onItemDel={this.props.onItemDel}
-            onItemUpdate={this.props.onItemUpdate}/>);
+            onItemUpdate={this.onUpdate}/>);
     }
 
     render() {
@@ -97,6 +123,7 @@ class CircleInputForm extends Component {
                 <div id="container">
                     { circleInputs }
                     { circleList.length<5 && <div className="btn float-right"><button onClick={ this.props.onItemAdd }>+</button></div> }
+                    { this.state.hasViewPortError && <div className="error-area"><small className="not-allowed">The sum of circles diameters cannot be larger than the viewport width : 500</small></div>}
                 </div>
             </div>
         );
@@ -113,7 +140,6 @@ class CircleInputs extends Component {
     onChange=(e)=>{
         var item = {};
         item[e.target.name] = parseInt(e.target.value);
-
         this.setState((prevState)=>{
             return item;
         });
@@ -165,7 +191,7 @@ class CircleList extends Component {
     render() {
         const items = this.props.items;
         var listItems = items.map(this.renderItem);
-        return (<svg id="chart" width="100%" height="500px"> {listItems} </svg>);
+        return (<svg id="chart" width="100%" height="500px"><rect className="d3bg" width="100%" height="500px"></rect> <g>{listItems} </g></svg>);
     }
 }
 
@@ -174,10 +200,7 @@ class CircleItem extends Component {
         const item = this.props.data;
         const _key = this.props.index+1;
         return (
-            <g>
                 <circle cy={item.cy} cx={item.cx} r={item.r} fill="purple"/>
-                <text y={item.cy+50} x={item.cx}>{_key}</text>
-            </g>
         )
     }
 }

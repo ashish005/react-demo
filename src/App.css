@@ -76,3 +76,13 @@ svg.rotate{
   -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
 }
+
+.d3bg {
+  fill: #FFF;
+}
+
+.error-area {
+  width:100%;
+  clear:both;
+  margin-top: 10px;
+}
