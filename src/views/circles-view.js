@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 function getCircleModel(item) {
-    this.cx = item.cx || 10;
-    this.cy = item.cy || 10;
-    this.r = item.r || 10;
+    this.cx = item.cx || 0;
+    this.cy = item.cy || 0;
+    this.r = item.r || 0;
     //Default item set
 }
 
@@ -98,7 +98,7 @@ class CircleInputForm extends Component {
             this.setState({hasViewPortError:true});
             setTimeout(function() {
                 this.setState({hasViewPortError:false})
-            }.bind(this), 2000);
+            }.bind(this), 3000);
         } else {
             this.props.onItemUpdate(index, item);
         }
@@ -123,7 +123,7 @@ class CircleInputForm extends Component {
                 <div id="container">
                     { circleInputs }
                     { circleList.length<5 && <div className="btn float-right"><button onClick={ this.props.onItemAdd }>+</button></div> }
-                    { this.state.hasViewPortError && <div className="error-area"><small className="not-allowed">The sum of circles diameters cannot be larger than the viewport width : 500</small></div>}
+                    { this.state.hasViewPortError && <div className="error-area"><small className="not-allowed">The sum of circles diameters cannot be larger than the viewport width i.e.(should be less than 500)</small></div>}
                 </div>
             </div>
         );
