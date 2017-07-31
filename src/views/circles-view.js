@@ -7,14 +7,16 @@ function getCircleModel(item) {
     //Default item set
 }
 
-
-
 class CirclesView extends Component{
     constructor(props) {
         super(props);
         this.state = {
             data: []
         };
+
+        this.handleAddEvent = this.handleAddEvent.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.onItemUpdate = this.onItemUpdate.bind(this);
     }
     componentDidMount() {
         this.updateCircles(this.getLocalStorageData());
@@ -28,7 +30,7 @@ class CirclesView extends Component{
     setLocalStorageData(item){
         localStorage.setItem('circleList', JSON.stringify(item));
     }
-    handleAddEvent=()=>{
+    handleAddEvent(){
         this.setState((prevState)=>{
             let item = prevState.data.concat([new getCircleModel({})]);
             this.setLocalStorageData(item);
@@ -36,7 +38,7 @@ class CirclesView extends Component{
         });
     }
 
-    handleDelete=(index)=>{
+    handleDelete(index){
         this.setState((prevState)=>{
             prevState.data.splice(index, 1);
             this.setLocalStorageData(prevState.data);
@@ -44,7 +46,7 @@ class CirclesView extends Component{
         });
     }
 
-    onItemUpdate=(index, item)=>{
+    onItemUpdate(index, item){
         const itemInfo = new getCircleModel(item);
         this.state.data[index]['cx']= itemInfo.cx;
         this.state.data[index]['cy']= itemInfo.cy;
@@ -79,6 +81,9 @@ class CircleInputForm extends Component {
     constructor(props) {
         super(props);
         this.state = { hasViewPortError : false };
+
+        this.renderCircleInputs = this.renderCircleInputs.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
     }
 
     getDiameter(index, itemD){
@@ -90,7 +95,7 @@ class CircleInputForm extends Component {
         return _item*2;
     }
 
-    onUpdate=(index, item)=>{
+    onUpdate(index, item){
         let _val = this.getDiameter(index, item) || 0;
 
         //Assumed view port width is 500
@@ -104,7 +109,7 @@ class CircleInputForm extends Component {
         }
     };
 
-    renderCircleInputs=(item, i)=> {
+    renderCircleInputs(item, i) {
         return(<CircleInputs
             key={Math.random()}
             index={i}
@@ -135,9 +140,13 @@ class CircleInputs extends Component {
         super(props);
         const _item = props.item;
         this.state = new getCircleModel(_item);
+
+        this.onChange = this.onChange.bind(this);
+        this.onDelEvent = this.onDelEvent.bind(this);
+        this.onupdateEvent = this.onupdateEvent.bind(this);
     }
 
-    onChange=(e)=>{
+    onChange(e){
         var item = {};
         item[e.target.name] = parseInt(e.target.value);
         this.setState((prevState)=>{
@@ -145,11 +154,11 @@ class CircleInputs extends Component {
         });
     }
 
-    onupdateEvent=(e)=>{
+    onupdateEvent(e){
         this.props.onItemUpdate(this.props.index, this.state);
     };
 
-    onDelEvent=(e)=>{
+    onDelEvent(e){
         this.props.onItemDel(this.props.index);
     };
 
