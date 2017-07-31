@@ -127,7 +127,7 @@ class CircleInputForm extends Component {
                 <h4>You can add up to 5 circles.</h4>
                 <div id="container">
                     { circleInputs }
-                    { circleList.length<5 && <div className="btn float-right"><button onClick={ this.props.onItemAdd }>+</button></div> }
+                    { circleList.length<5 && <div className="btn float-right"><button id="circleAdd" onClick={ this.props.onItemAdd }>+</button></div> }
                     { this.state.hasViewPortError && <div className="error-area"><small className="not-allowed">The sum of circles diameters cannot be larger than the viewport width i.e.(should be less than 500)</small></div>}
                 </div>
             </div>

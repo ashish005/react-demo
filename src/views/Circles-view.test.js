@@ -12,10 +12,40 @@ describe('<CirclesView />', () => {
         expect(p.text()).toBe('Circles');
     });
 
-    it('should render an `.circleArea`', () => {
+    it('should have 2 `.circleArea`  classes assigned to Component', () => {
         const wrapper = shallow(<CirclesView />);
         expect(wrapper.find('.circleArea').length).toBe(2);
     });
+
+    it('CirclesView Component should contain CircleInputForm component', () => {
+        const comp = shallow(<CirclesView />);
+
+        const elem = comp.find('CircleInputForm');
+        expect(elem.exists()).toBe(true);
+    });
+
+    it('CirclesView Component should contain CircleList component', () => {
+        const comp = shallow(<CirclesView />);
+
+        const elem = comp.find('CircleList');
+        expect(elem.exists()).toBe(true);
+    });
+
+    it('CirclesView Component should not contain CircleInputs component', () => {
+        const comp = shallow(<CirclesView />);
+
+        const elem = comp.find('CircleInputs');
+        expect(elem.exists()).toBe(false);
+    });
+
+    /*const data = [{cx:0, cy:0, r:0}];
+    const handleAddEvent = jest.fn();
+    const p = wrapper.find('#circleAdd');
+    console.log(p.debug());
+    p.simulate('click');
+    expect(handleAddEvent).toBeCalledWith(1);
+    onItemDel={this.handleDelete}
+    onItemUpdate={this.onItemUpdate}*/
 
     /*it('should render an `.icon-star`', () => {
         const wrapper = shallow(<MyComponent />);
